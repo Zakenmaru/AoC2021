@@ -27,27 +27,37 @@ def p1():
     print(res)
 
 
-def p2():
-    dig, arr = create_array()
-    temp_arr_o = copy.copy(arr)
-    temp_arr_co = copy.copy(arr)
+def column(matrix, i):
+    return [row[i] for row in matrix]
+
+
+def rating_filter(arr, criteria):
     index = 0
-    for i in dig:
-        if len(temp_arr_o) == 1 and len(temp_arr_o) == 1 and index >= len(dig):
-            break
-        mcv = "1" if i.count("1") >= i.count("0") else "0"
-        lcv = "0" if i.count("0") <= i.count("1") else "1"
-        for bin in arr:
-            if bin[index] != mcv:
-                temp_arr_o.remove(bin)
-                arr.remove(bin)
-            if bin[index] != lcv:
-                temp_arr_co.remove(bin)
-                arr.remove(bin)
-        index += 1
-    
-    res = int(temp_arr_o[0], 2) * int(temp_arr_co[0], 2)
+    if criteria == "o2":
+        while index < len(arr[0]) and len(arr) > 1:
+            cur_col = column(arr, index)
+            count_one = cur_col.count("1")
+            count_zero = cur_col.count("0")
+            crit = "1" if count_one >= count_zero else "0"
+            arr = [bin for bin in arr if bin[index] == crit]
+            index += 1
+    else:
+        while index < len(arr[0]) and len(arr) > 1:
+            cur_col = column(arr, index)
+            count_one = cur_col.count("1")
+            count_zero = cur_col.count("0")
+            crit = "0" if count_zero <= count_one else "1"
+            arr = [bin for bin in arr if bin[index] == crit]
+            index += 1
+    return arr[0]
+
+def p2():
+    _, arr = create_array()
+    oxygen_rating = rating_filter(copy.copy(arr), criteria="o2")
+    carbon_rating = rating_filter(copy.copy(arr), criteria="co2")
+    res = int(oxygen_rating, 2) * int(carbon_rating, 2)
     print(res)
+
 
 def main():
     p1()
